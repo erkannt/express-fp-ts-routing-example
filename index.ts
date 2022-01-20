@@ -2,24 +2,24 @@ import * as P from "fp-ts-routing";
 import { pipe } from "fp-ts/function";
 import * as O from "fp-ts/Option";
 import express from 'express'
+import * as E from 'fp-ts/Either';
 
 const app = express();
 
 const homeMatch = P.end;
 
+const router = homeMatch.parser.map(() => E.right('hello world'))
 
 app.get("*", (req, res) => {
   pipe(
     req.originalUrl,
-    (url) => P.parse(homeMatch.parser.map(O.some), P.Route.parse(url), O.none),
-    O.fold(
+    (url) => P.parse(router, P.Route.parse(url), E.left('not-found')),
+    E.match(
       () => {
         res.status(404);
         res.send("Not found");
       },
-      () => {
-        res.send('hello world');
-      }
+      (body) => res.send
     )
   );
 });
