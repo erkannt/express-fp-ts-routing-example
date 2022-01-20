@@ -7,8 +7,11 @@ import * as E from 'fp-ts/Either';
 const app = express();
 
 const homeMatch = P.end;
+const fooMatch = P.lit('foo').then(P.end)
 
-const router = homeMatch.parser.map(() => E.right('hello world'))
+const router = P.zero()
+.alt(homeMatch.parser.map(() => E.right('hello world')))
+.alt(fooMatch.parser.map(() => E.right('foo')))
 
 app.get("*", (req, res) => {
   pipe(
@@ -19,7 +22,7 @@ app.get("*", (req, res) => {
         res.status(404);
         res.send("Not found");
       },
-      (body) => res.send
+      (body) => res.send(body)
     )
   );
 });
