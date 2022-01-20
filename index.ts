@@ -7,14 +7,14 @@ import * as E from 'fp-ts/Either';
 const app = express();
 
 const homeMatch = P.end;
-const fooMatch = P.lit('foo').then(P.end)
+const searchMatch = P.lit('search').then(P.end)
 
-const home = () => E.right('hello world')
-const foo = () => E.right('foo')
+const homePage = () => E.right('hello world')
+const searchPage = ({query}) => E.right(`Search query: ${query}`)
 
 const router = P.zero()
-.alt(homeMatch.parser.map(home))
-.alt(fooMatch.parser.map(foo))
+.alt(homeMatch.parser.map(homePage))
+.alt(searchMatch.parser.map(searchPage))
 
 app.get("*", (req, res) => {
   pipe(
