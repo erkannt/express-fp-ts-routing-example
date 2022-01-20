@@ -1,6 +1,5 @@
 import * as P from "fp-ts-routing";
 import { pipe } from "fp-ts/function";
-import * as O from "fp-ts/Option";
 import express from 'express'
 import * as E from 'fp-ts/Either';
 
