@@ -9,9 +9,12 @@ const app = express();
 const homeMatch = P.end;
 const fooMatch = P.lit('foo').then(P.end)
 
+const home = () => E.right('hello world')
+const foo = () => E.right('foo')
+
 const router = P.zero()
-.alt(homeMatch.parser.map(() => E.right('hello world')))
-.alt(fooMatch.parser.map(() => E.right('foo')))
+.alt(homeMatch.parser.map(home))
+.alt(fooMatch.parser.map(foo))
 
 app.get("*", (req, res) => {
   pipe(
