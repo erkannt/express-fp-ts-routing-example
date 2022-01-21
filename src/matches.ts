@@ -12,3 +12,5 @@ export const groupMatch = lit('groups').then(type('slug', GroupSlugC)).then(lit(
 
 export const formInputMatch = lit('form')
 
+export const formHandlerMatch = lit('form')
+
