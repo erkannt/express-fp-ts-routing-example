@@ -6,7 +6,7 @@ import * as O from 'fp-ts/Option'
 import * as M from 'fp-ts/Monoid'
 import { homePage } from './pages/home-page'
 import { searchPage } from './pages/search-page'
-import { homeMatch, searchMatch, groupPageMatch, groupsPageMatch } from './matches'
+import { groupMatch, groupsMatch, homeMatch, searchMatch, } from './matches'
 import { groupsPage } from './pages/groups-page'
 
 const app = express()
@@ -15,8 +15,8 @@ const router = pipe(
   [
     homeMatch.parser.map(homePage),
     searchMatch.parser.map(searchPage),
-    groupsPageMatch.parser.map(groupsPage),
-    groupPageMatch.parser.map(groupPage)
+    groupsMatch.parser.map(groupsPage),
+    groupMatch.parser.map(groupPage)
   ],
   M.concatAll(P.getParserMonoid())
 )
