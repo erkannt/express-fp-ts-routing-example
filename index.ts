@@ -1,35 +1,45 @@
 import * as P from "fp-ts-routing";
 import { pipe } from "fp-ts/function";
 import express from 'express'
-import * as E from 'fp-ts/Either';
+import * as O from 'fp-ts/Option';
+import * as M from 'fp-ts/Monoid'
+import * as t from 'io-ts';
 
 const app = express();
 
+// home
 const homeMatch = P.end;
-const searchMatch = P.lit('search').then(P.end)
 
-// Is there a way to get a compile error for not having this in the router?
-export const foo = P.lit('foo')
+const homePage = (): string => ('hello world')
 
-const homePage = () => E.right('hello world')
-const searchPage = ({query}) => E.right(`Search query: ${query}`)
+// with a query: /search?query=foobar
+const searchMatch = P.lit('search')
+.then(P.query(t.strict({ query: t.string })))
+.then(P.end)
 
-const router = P.zero()
-.alt(homeMatch.parser.map(homePage))
-// How can I get the compiler to complain that `searchMatch`
-// is not providing `query` param to `searchPage`?
-.alt(searchMatch.parser.map(searchPage))
+type SearchParams = { query: string }
+
+const searchPage = (params: SearchParams): string => (`Search query: ${params.query}`)
+
+const router = pipe(
+  [
+    homeMatch.parser.map(homePage),
+    searchMatch.parser.map(searchPage),
+  ],
+  M.concatAll(P.getParserMonoid())
+)
 
 app.get("*", (req, res) => {
   pipe(
     req.originalUrl,
-    (url) => P.parse(router, P.Route.parse(url), E.left('not-found')),
-    E.match(
+    P.Route.parse,
+    router.run,
+    O.match(
       () => {
         res.status(404);
         res.send("Not found");
       },
-      (body) => res.send(body)
+      ([body]) => res.send(body)
     )
   );
 });
