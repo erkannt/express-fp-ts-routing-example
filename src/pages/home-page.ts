@@ -1,5 +1,5 @@
 import { format } from 'fp-ts-routing'
-import { groupsMatch, searchMatch } from '../matches'
+import { formInputMatch, groupsMatch, searchMatch } from '../matches'
 
 export const homePage = (): string => (`
   <h1>fp-ts-routing and Express</h1>
@@ -7,5 +7,6 @@ export const homePage = (): string => (`
   <ul>
     <li><a href=${format(groupsMatch.formatter, {})}>Groups page</a></li>
     <li><a href=${format(searchMatch.formatter, {query: 'test'})}>Example search</a></li>
+    <li><a href=${format(formInputMatch.formatter, {})}>Form input</a></li>
   </ul>
 `)

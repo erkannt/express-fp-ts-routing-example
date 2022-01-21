@@ -10,3 +10,5 @@ export const groupsMatch = lit('groups').then(end)
 
 export const groupMatch = lit('groups').then(type('slug', GroupSlugC)).then(lit('evaluated-articles'))
 
+export const formInputMatch = lit('form')
+
