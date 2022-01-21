@@ -6,7 +6,7 @@ export const GroupSlugC = t.brand(
   'GroupSlug'
 )
 
-type GroupSlug = t.TypeOf<typeof GroupSlugC>
+export type GroupSlug = t.TypeOf<typeof GroupSlugC>
 
 type Params = {slug: GroupSlug}
 
