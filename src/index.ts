@@ -1,12 +1,12 @@
-import { evaluatedArticlesPage, groupSlugCodec } from './group-page'
+import { groupPage, GroupSlugC } from './pages/group-page'
 import * as P from 'fp-ts-routing'
 import { pipe } from 'fp-ts/function'
 import express from 'express'
 import * as O from 'fp-ts/Option'
 import * as M from 'fp-ts/Monoid'
 import * as t from 'io-ts'
-import { homePage } from './home-page'
-import { searchPage } from './search-page'
+import { homePage } from './pages/home-page'
+import { searchPage } from './pages/search-page'
 
 const app = express()
 
@@ -22,14 +22,14 @@ const searchMatch = P.lit('search')
 
 // with regex guarded param: /groups/:slug(${groupSlugRegex})
 const groupPageMatch = P.lit('groups')
-  .then(P.type('slug', groupSlugCodec))
+  .then(P.type('slug', GroupSlugC))
   .then(P.lit('evaluated-articles'))
 
 const router = pipe(
   [
     homeMatch.parser.map(homePage),
     searchMatch.parser.map(searchPage),
-    groupPageMatch.parser.map(evaluatedArticlesPage)
+    groupPageMatch.parser.map(groupPage)
   ],
   M.concatAll(P.getParserMonoid())
 )
