@@ -2,12 +2,13 @@ import { pipe } from 'fp-ts/lib/function'
 import * as t from 'io-ts'
 import * as E from 'fp-ts/Either'
 import { formatValidationErrors }  from 'io-ts-reporters'
+import * as tt from 'io-ts-types'
 
 const renderSuccess = (viewModel: Input) => `
-  Form received:
+  <h1>Form received:</h1>
 
-  Name: ${viewModel.name}
-  Favourite colour: ${viewModel.color}
+  Name: ${viewModel.name} <br>
+  Favourite number: ${viewModel.fav_number} <br>
 `
 
 const renderError = (input: unknown) => (errors: ReadonlyArray<string>) => `
@@ -24,7 +25,7 @@ const renderError = (input: unknown) => (errors: ReadonlyArray<string>) => `
 
 const InputC = t.type({
   name: t.string,
-  color: t.string,
+  fav_number: tt.NumberFromString
 })
 
 type Input = t.TypeOf<typeof InputC>

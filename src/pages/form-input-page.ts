@@ -5,8 +5,10 @@ export const formInputPage = (): string => (`
   <h1>A input form</h1>
 
   <form action="${format(formHandlerMatch.formatter, {})}" method="post">
-    <label for="team_name">Enter name: </label>
-    <input id="team_name" type="text" name="name_field" value="Default name for team.">
+    <label for="name">Name: </label>
+    <input id="name" type="text" name="name" value="Maria Mustermensch">
+    <label for="fav_number">Fav Number: </label>
+    <input id="fav_number" type="text" name="fav_number" value="42">
     <input type="submit" value="OK">
   </form>
 `)
