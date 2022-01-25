@@ -56,7 +56,11 @@ app.post('*', (req, res) => {
         res.status(404)
         res.send('Not found')
       },
-      ([body]) => res.send(body)
+      ([handler]) => pipe(
+        req.body,
+        handler,
+        (body) => res.send(body)
+      )
     )
   )
 })
