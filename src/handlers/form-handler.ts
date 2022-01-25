@@ -1,7 +1,7 @@
 import { pipe } from 'fp-ts/lib/function'
 import * as t from 'io-ts'
 import * as E from 'fp-ts/Either'
-import * as PR from 'io-ts/PathReporter'
+import { formatValidationErrors }  from 'io-ts-reporters'
 
 const renderSuccess = (viewModel: Input) => `
   Form received:
@@ -10,10 +10,16 @@ const renderSuccess = (viewModel: Input) => `
   Favourite colour: ${viewModel.color}
 `
 
-const renderError = (error: string) => `
-  Form invalid:
+const renderError = (input: unknown) => (errors: ReadonlyArray<string>) => `
+  <h1>Bad input</h1>
 
-  ${error}
+  <h2>Issues</h2>
+
+  ${errors.join('<br>')}
+
+  <h2>Input provided</h2>
+
+  ${JSON.stringify(input)}
 `
 
 const InputC = t.type({
@@ -25,11 +31,10 @@ type Input = t.TypeOf<typeof InputC>
 
 export const formHandler = () => (input: unknown): string => pipe(
   input,
-  (foo) => {console.log('>>>>>>>>>>>>', foo); return foo},
   InputC.decode,
-  E.mapLeft((errors) => PR.failure(errors).join('\n')),
+  E.mapLeft(formatValidationErrors),
   E.match(
-    renderError,
+    renderError(input),
     renderSuccess,
   )
 )
