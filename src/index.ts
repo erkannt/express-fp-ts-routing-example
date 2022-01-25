@@ -13,6 +13,8 @@ import { formHandler } from './handlers/form-handler'
 
 const app = express()
 
+app.use(express.urlencoded({ extended: true }))
+
 const getRouter = pipe(
   [
     homeMatch.parser.map(homePage),

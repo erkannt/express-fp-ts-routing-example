@@ -25,6 +25,7 @@ type Input = t.TypeOf<typeof InputC>
 
 export const formHandler = () => (input: unknown): string => pipe(
   input,
+  (foo) => {console.log('>>>>>>>>>>>>', foo); return foo},
   InputC.decode,
   E.mapLeft((errors) => PR.failure(errors).join('\n')),
   E.match(
