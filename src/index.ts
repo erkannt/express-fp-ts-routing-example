@@ -15,18 +15,20 @@ const app = express()
 
 app.use(express.urlencoded({ extended: true }))
 
-const getRouter = pipe(
+const getRouter: P.Parser<string> = pipe(
   [
     homeMatch.parser.map(homePage),
     searchMatch.parser.map(searchPage),
     groupsMatch.parser.map(groupsPage),
     groupMatch.parser.map(groupPage),
-    formInputMatch.parser.map(formInputPage)
+    formInputMatch.parser.map(formInputPage),
   ],
   M.concatAll(P.getParserMonoid())
 )
 
-const postRouter = pipe(
+type BodyHandler = (input: unknown) => string
+
+const postRouter: P.Parser<BodyHandler> = pipe(
   [
     formHandlerMatch.parser.map(formHandler),
   ],
